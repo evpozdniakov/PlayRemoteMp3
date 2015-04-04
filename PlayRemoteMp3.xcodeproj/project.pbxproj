@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9A1ED1841ACB77060001F9DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1ED1831ACB77060001F9DC /* AppDelegate.swift */; };
+		9A1ED1861ACB77060001F9DC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1ED1851ACB77060001F9DC /* ViewController.swift */; };
+		9A1ED1891ACB77060001F9DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A1ED1871ACB77060001F9DC /* Main.storyboard */; };
+		9A1ED18B1ACB77060001F9DC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A1ED18A1ACB77060001F9DC /* Images.xcassets */; };
+		9A1ED18E1ACB77060001F9DC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A1ED18C1ACB77060001F9DC /* LaunchScreen.xib */; };
+		9A1ED19A1ACB77060001F9DC /* PlayRemoteMp3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1ED1991ACB77060001F9DC /* PlayRemoteMp3Tests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A1ED1941ACB77060001F9DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A1ED1761ACB77060001F9DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A1ED17D1ACB77060001F9DC;
+			remoteInfo = PlayRemoteMp3;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9A1ED17E1ACB77060001F9DC /* PlayRemoteMp3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayRemoteMp3.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A1ED1821ACB77060001F9DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A1ED1831ACB77060001F9DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9A1ED1851ACB77060001F9DC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9A1ED1881ACB77060001F9DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9A1ED18A1ACB77060001F9DC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9A1ED18D1ACB77060001F9DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		9A1ED1931ACB77060001F9DC /* PlayRemoteMp3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlayRemoteMp3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A1ED1981ACB77060001F9DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A1ED1991ACB77060001F9DC /* PlayRemoteMp3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRemoteMp3Tests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9A1ED17B1ACB77060001F9DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A1ED1901ACB77060001F9DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9A1ED1751ACB77060001F9DC = {
+			isa = PBXGroup;
+			children = (
+				9A1ED1801ACB77060001F9DC /* PlayRemoteMp3 */,
+				9A1ED1961ACB77060001F9DC /* PlayRemoteMp3Tests */,
+				9A1ED17F1ACB77060001F9DC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9A1ED17F1ACB77060001F9DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A1ED17E1ACB77060001F9DC /* PlayRemoteMp3.app */,
+				9A1ED1931ACB77060001F9DC /* PlayRemoteMp3Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A1ED1801ACB77060001F9DC /* PlayRemoteMp3 */ = {
+			isa = PBXGroup;
+			children = (
+				9A1ED1831ACB77060001F9DC /* AppDelegate.swift */,
+				9A1ED1851ACB77060001F9DC /* ViewController.swift */,
+				9A1ED1871ACB77060001F9DC /* Main.storyboard */,
+				9A1ED18A1ACB77060001F9DC /* Images.xcassets */,
+				9A1ED18C1ACB77060001F9DC /* LaunchScreen.xib */,
+				9A1ED1811ACB77060001F9DC /* Supporting Files */,
+			);
+			path = PlayRemoteMp3;
+			sourceTree = "<group>";
+		};
+		9A1ED1811ACB77060001F9DC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A1ED1821ACB77060001F9DC /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9A1ED1961ACB77060001F9DC /* PlayRemoteMp3Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9A1ED1991ACB77060001F9DC /* PlayRemoteMp3Tests.swift */,
+				9A1ED1971ACB77060001F9DC /* Supporting Files */,
+			);
+			path = PlayRemoteMp3Tests;
+			sourceTree = "<group>";
+		};
+		9A1ED1971ACB77060001F9DC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A1ED1981ACB77060001F9DC /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9A1ED17D1ACB77060001F9DC /* PlayRemoteMp3 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A1ED19D1ACB77060001F9DC /* Build configuration list for PBXNativeTarget "PlayRemoteMp3" */;
+			buildPhases = (
+				9A1ED17A1ACB77060001F9DC /* Sources */,
+				9A1ED17B1ACB77060001F9DC /* Frameworks */,
+				9A1ED17C1ACB77060001F9DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlayRemoteMp3;
+			productName = PlayRemoteMp3;
+			productReference = 9A1ED17E1ACB77060001F9DC /* PlayRemoteMp3.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9A1ED1921ACB77060001F9DC /* PlayRemoteMp3Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A1ED1A01ACB77060001F9DC /* Build configuration list for PBXNativeTarget "PlayRemoteMp3Tests" */;
+			buildPhases = (
+				9A1ED18F1ACB77060001F9DC /* Sources */,
+				9A1ED1901ACB77060001F9DC /* Frameworks */,
+				9A1ED1911ACB77060001F9DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A1ED1951ACB77060001F9DC /* PBXTargetDependency */,
+			);
+			name = PlayRemoteMp3Tests;
+			productName = PlayRemoteMp3Tests;
+			productReference = 9A1ED1931ACB77060001F9DC /* PlayRemoteMp3Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A1ED1761ACB77060001F9DC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Evgeniy Pozdnyakov";
+				TargetAttributes = {
+					9A1ED17D1ACB77060001F9DC = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					9A1ED1921ACB77060001F9DC = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 9A1ED17D1ACB77060001F9DC;
+					};
+				};
+			};
+			buildConfigurationList = 9A1ED1791ACB77060001F9DC /* Build configuration list for PBXProject "PlayRemoteMp3" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9A1ED1751ACB77060001F9DC;
+			productRefGroup = 9A1ED17F1ACB77060001F9DC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9A1ED17D1ACB77060001F9DC /* PlayRemoteMp3 */,
+				9A1ED1921ACB77060001F9DC /* PlayRemoteMp3Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9A1ED17C1ACB77060001F9DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A1ED1891ACB77060001F9DC /* Main.storyboard in Resources */,
+				9A1ED18E1ACB77060001F9DC /* LaunchScreen.xib in Resources */,
+				9A1ED18B1ACB77060001F9DC /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A1ED1911ACB77060001F9DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9A1ED17A1ACB77060001F9DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A1ED1861ACB77060001F9DC /* ViewController.swift in Sources */,
+				9A1ED1841ACB77060001F9DC /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A1ED18F1ACB77060001F9DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A1ED19A1ACB77060001F9DC /* PlayRemoteMp3Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A1ED1951ACB77060001F9DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A1ED17D1ACB77060001F9DC /* PlayRemoteMp3 */;
+			targetProxy = 9A1ED1941ACB77060001F9DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		9A1ED1871ACB77060001F9DC /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A1ED1881ACB77060001F9DC /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		9A1ED18C1ACB77060001F9DC /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A1ED18D1ACB77060001F9DC /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9A1ED19B1ACB77060001F9DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9A1ED19C1ACB77060001F9DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9A1ED19E1ACB77060001F9DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PlayRemoteMp3/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9A1ED19F1ACB77060001F9DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = PlayRemoteMp3/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		9A1ED1A11ACB77060001F9DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PlayRemoteMp3Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayRemoteMp3.app/PlayRemoteMp3";
+			};
+			name = Debug;
+		};
+		9A1ED1A21ACB77060001F9DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PlayRemoteMp3Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayRemoteMp3.app/PlayRemoteMp3";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A1ED1791ACB77060001F9DC /* Build configuration list for PBXProject "PlayRemoteMp3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A1ED19B1ACB77060001F9DC /* Debug */,
+				9A1ED19C1ACB77060001F9DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A1ED19D1ACB77060001F9DC /* Build configuration list for PBXNativeTarget "PlayRemoteMp3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A1ED19E1ACB77060001F9DC /* Debug */,
+				9A1ED19F1ACB77060001F9DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		9A1ED1A01ACB77060001F9DC /* Build configuration list for PBXNativeTarget "PlayRemoteMp3Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A1ED1A11ACB77060001F9DC /* Debug */,
+				9A1ED1A21ACB77060001F9DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9A1ED1761ACB77060001F9DC /* Project object */;
+}
