@@ -31,7 +31,7 @@
                                     <action selector="playBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="h3J-bF-iJ7"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lk0-EQ-Gau">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lk0-EQ-Gau">
                                 <rect key="frame" x="88" y="114" width="43" height="30"/>
                                 <state key="normal" title="Pause">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,7 +40,7 @@
                                     <action selector="pauseBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dsJ-sr-zgO"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSH-Vw-8qh">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSH-Vw-8qh">
                                 <rect key="frame" x="177" y="114" width="56" height="30"/>
                                 <state key="normal" title="Resume">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -52,15 +52,15 @@
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E1S-Xe-m1n">
                                 <rect key="frame" x="86" y="157" width="144" height="31"/>
                                 <connections>
-                                    <action selector="remoteMp3VolumeChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Hcs-X3-GHe"/>
+                                    <action selector="volumeSliderMoved:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Hcs-X3-GHe"/>
                                 </connections>
                             </slider>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Zvi-oA-bqe">
                                 <rect key="frame" x="12" y="205" width="294" height="31"/>
                                 <connections>
-                                    <action selector="touchDown:" destination="vXZ-lx-hvc" eventType="touchDown" id="wWK-sg-GcB"/>
-                                    <action selector="touchUpInside:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="83s-ad-9ti"/>
-                                    <action selector="touchUpOutside:" destination="vXZ-lx-hvc" eventType="touchUpOutside" id="guR-we-DNJ"/>
+                                    <action selector="timeSliderMoved:" destination="vXZ-lx-hvc" eventType="valueChanged" id="wWK-sg-GBc"/>
+                                    <action selector="timeSliderReleased:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="83s-ad-9ti"/>
+                                    <action selector="timeSliderTouched:" destination="vXZ-lx-hvc" eventType="touchDown" id="wWK-sg-GcB"/>
                                 </connections>
                             </slider>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wMH-Nr-s5H">
@@ -85,10 +85,10 @@
                     <connections>
                         <outlet property="activityIndicator" destination="aix-vf-xNR" id="0Uz-oU-vie"/>
                         <outlet property="currentTimeLbl" destination="wMH-Nr-s5H" id="Lhl-Zi-lHL"/>
-                        <outlet property="currentTimeSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
                         <outlet property="pauseBtn" destination="lk0-EQ-Gau" id="hSs-be-FTE"/>
                         <outlet property="playBtn" destination="MwL-Eo-hE2" id="T6U-Dy-EBD"/>
                         <outlet property="resumeBtn" destination="PSH-Vw-8qh" id="ztS-Co-gnZ"/>
+                        <outlet property="timeSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
                         <outlet property="volumeSlider" destination="E1S-Xe-m1n" id="JVT-b8-Flp"/>
                     </connections>
                 </viewController>

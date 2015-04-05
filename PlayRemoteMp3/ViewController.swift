@@ -12,6 +12,7 @@ import AVFoundation
 class ViewController: UIViewController {
     enum MyAVPlayerStatus : Int {
         case Unknown
+        case Starting
         case Playing
         case Paused
         case SeekingWhilePaused
@@ -24,7 +25,7 @@ class ViewController: UIViewController {
     var pausedAt: CMTime?
     var trackDuration: CMTime?
     var playerStatus: MyAVPlayerStatus = .Unknown
-    var refreshSliderTimer: NSTimer?
+    var redrawTimeSliderTimer: NSTimer?
     let refreshSliderEvery = 0.1
     let playerKeysToObserve = ["rate", "status"]
 
@@ -32,22 +33,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var pauseBtn: UIButton!
     @IBOutlet weak var resumeBtn: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
-    @IBOutlet weak var currentTimeSlider: UISlider!
+    @IBOutlet weak var timeSlider: UISlider!
     @IBOutlet weak var currentTimeLbl: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // #MARK: - UIViewController methods
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureRemoteMp3Controls()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     deinit {
         if playerStatus == .Playing {
@@ -57,7 +47,7 @@ class ViewController: UIViewController {
         stopObservingPlayerKeyPaths()
     }
     
-    // #MARK: - event listeners
+    // #MARK: - events
 
     @IBAction func playBtnClicked(sender: AnyObject) {
         startPlayback()
@@ -71,19 +61,19 @@ class ViewController: UIViewController {
         resumePlayback()
     }
 
-    @IBAction func remoteMp3VolumeChanged(sender: UISlider) {
+    @IBAction func volumeSliderMoved(sender: UISlider) {
         playbackSetVolumeTo(sender.value)
     }
 
-    @IBAction func touchDown(sender: UISlider) {
+    @IBAction func timeSliderTouched(sender: UISlider) {
        playbackStartSeeking()
     }
 
-    @IBAction func touchUpInside(sender: UISlider) {
-        playbackCompleteSeeking()
+    @IBAction func timeSliderMoved(sender: UISlider) {
+       redrawCurentTime()
     }
 
-    @IBAction func touchUpOutside(sender: UISlider) {
+    @IBAction func timeSliderReleased(sender: UISlider) {
         playbackCompleteSeeking()
     }
 
@@ -99,6 +89,27 @@ class ViewController: UIViewController {
         }
     }
 
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if let player = object as? AVPlayer {
+            if keyPath == "rate" {
+                if player.status != .ReadyToPlay {
+                    // ignore as player isn't ready to play yet
+                    return;
+                }
+
+                if player.rate > 0 {
+                    playbackDidStart()
+                }
+                else {
+                    playbackDidPause()
+                }
+            }
+            else if keyPath == "status" {
+                // ?
+            }
+        }
+    }
+
     // #MARK: - playback
 
     func startPlayback() {
@@ -107,16 +118,30 @@ class ViewController: UIViewController {
         // let url = "http://mds.kallisto.ru/roygbiv/records/mp3/Leonid_Kaganov_-_Choza_griby.mp3"
         let playerItem = AVPlayerItem( URL:NSURL( string:url ) )
         player = AVPlayer(playerItem:playerItem)
-        startObservingPlayerKeyPaths()
-        player.rate = 1.0;
         player.play()
-        playBtn.enabled = false
-        activityIndicator.startAnimating()
+        player.rate = 1.0;
+        startObservingPlayerKeyPaths()
+        playerStatus = .Starting
+        redrawPlaybackControls()
+    }
+
+    func playbackDidStart() {
+        trackDuration = player.currentItem.asset.duration
+        playerStatus = .Playing
+        configureRedrawTimer()
+        activityIndicator.stopAnimating()
+        redrawPlaybackControls()
     }
     
     func pausePlayback() {
         pausedAt = player.currentTime()
         player.pause()
+    }
+
+    func playbackDidPause() {
+        playerStatus = .Paused
+        redrawTimeSliderTimer?.invalidate()
+        redrawPlaybackControls()
     }
     
     func resumePlayback() {
@@ -131,101 +156,120 @@ class ViewController: UIViewController {
     }
 
     func playbackStartSeeking() {
-        playerStatus = playerStatus == .Playing ? .SeekingWhilePlaying : .SeekingWhilePaused
+        redrawTimeSliderTimer?.invalidate()
+
+        switch playerStatus {
+        case .Playing:
+            playerStatus = .SeekingWhilePlaying
+        case .Paused:
+            playerStatus = .SeekingWhilePaused
+        default:
+            break
+        }
+
+        redrawPlaybackControls()
     }
 
     func playbackCompleteSeeking() {
         if let duration = trackDuration {
-            let position = Float(currentTimeSlider.value)
+            let position = Float(timeSlider.value)
             let value = Float(duration.value) * position
             let seekTo = CMTimeMake(Int64(value), duration.timescale)
 
-            if playerStatus == .SeekingWhilePaused {
-                pausedAt = seekTo
-                playerStatus = .Paused
+            switch playerStatus {
+            case .SeekingWhilePlaying:
+                player.seekToTime(seekTo) { success in
+                    if success {
+                        self.configureRedrawTimer()
+                        self.playerStatus = .Playing
+                        self.redrawPlaybackControls()
+                    }
+                }
+           case .SeekingWhilePaused:
+                player.play()
+                if let pausedAt = pausedAt {
+                    player.seekToTime(seekTo)
+                }
+                player.seekToTime(seekTo) { success in
+                    if success {
+                        self.pausedAt = self.player.currentTime()
+                        self.player.pause()
+                        self.playerStatus = .Paused
+                        self.redrawPlaybackControls()
+                    }
+                }
+                redrawPlaybackControls()
+            default:
+                break
             }
-            else {
-                player.seekToTime(seekTo)
-                playerStatus = .Playing
-            }
+
         }
+    }
+
+    func configureRedrawTimer() {
+        redrawTimeSliderTimer = NSTimer.scheduledTimerWithTimeInterval(refreshSliderEvery, target: self, selector: Selector("redrawTimeSlider"), userInfo: nil, repeats: true)
     }
 
     // #MARK: - redrawnings
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if let object = object as? AVPlayer {
-            if object == player {
-                if keyPath == "rate" {
-                    if player.status != .ReadyToPlay {
-                        println("--- not ready yet: \(player.status)")
-                        return;
-                    }
-                    if player.rate > 0 {
-                        println("--- rate > 0")
-                        playerStatus = .Playing
-                        refreshSliderTimer = NSTimer.scheduledTimerWithTimeInterval(refreshSliderEvery, target: self, selector: Selector("configureRemoteMp3Controls"), userInfo: nil, repeats: true)
-                        activityIndicator.stopAnimating()
-                    }
-                    else {
-                        playerStatus = .Paused
-                        refreshSliderTimer?.invalidate()
-                    }
-                    configureRemoteMp3Controls()
-                }
-                else if keyPath == "status" {
-                    if player.status == .Unknown {
-                        playerStatus = .Unknown
-                        refreshSliderTimer?.invalidate()
-                        configureRemoteMp3Controls()
-                    }
-                    else if player.status == .ReadyToPlay {
-                        println("---ready to play")
-                        trackDuration = player.currentItem.asset.duration
-                    }
-                }
-            }
-        }
-        else {
-            println("something else")
-        }
-    }
-
-    func configureRemoteMp3Controls() {
+    func redrawPlaybackControls() {
         switch playerStatus {
-        case .Unknown:
+        /* case .Unknown:
             playBtn.enabled = true
             pauseBtn.enabled = false
             resumeBtn.enabled = false
             volumeSlider.enabled = false
-            currentTimeSlider.enabled = false
-            currentTimeLbl.hidden = true
+            timeSlider.enabled = false
+            currentTimeLbl.hidden = true */
+        case .Starting:
+            if playBtn.enabled { playBtn.enabled = false }
+            if pauseBtn.enabled { pauseBtn.enabled = false }
+            if resumeBtn.enabled { resumeBtn.enabled = false }
+            if volumeSlider.enabled { volumeSlider.enabled = false }
+            if timeSlider.enabled { timeSlider.enabled = false }
+            if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
         case .Playing:
-            playBtn.enabled = false
-            pauseBtn.enabled = true
-            resumeBtn.enabled = false
-            volumeSlider.enabled = true
-            currentTimeSlider.enabled = true
-            if let duration = trackDuration {
-                let currentTime = player.currentItem.currentTime()
-                let position = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)
-                currentTimeSlider.value = Float(position)
-                
-                let currentTimeSeconds = lroundf(Float(CMTimeGetSeconds(currentTime)))
-                let hours = currentTimeSeconds / 3600
-                let minutes = currentTimeSeconds / 60 % 60
-                let seconds = currentTimeSeconds % 60
-                currentTimeLbl.hidden = false
-                currentTimeLbl.text = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-            }
+            if playBtn.enabled { playBtn.enabled = false }
+            if !pauseBtn.enabled { pauseBtn.enabled = true }
+            if resumeBtn.enabled { resumeBtn.enabled = false }
+            if !volumeSlider.enabled { volumeSlider.enabled = true }
+            if !timeSlider.enabled { timeSlider.enabled = true }
+            if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
+            redrawTimeSlider()
         case .Paused:
-            playBtn.enabled = false
-            pauseBtn.enabled = false
-            resumeBtn.enabled = true
-            volumeSlider.enabled = true
-            currentTimeSlider.enabled = true
+            if playBtn.enabled { playBtn.enabled = false }
+            if pauseBtn.enabled { pauseBtn.enabled = false }
+            if !resumeBtn.enabled { resumeBtn.enabled = true }
+            if !volumeSlider.enabled { volumeSlider.enabled = true }
+            if !timeSlider.enabled { timeSlider.enabled = true }
+            if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
+        case .SeekingWhilePlaying, .SeekingWhilePaused:
+            if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
         default:
             break        
+        }
+    }
+
+    func redrawTimeSlider() {
+        if let duration = trackDuration {
+            let currentTime = player.currentItem.currentTime()
+            let position = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)
+            timeSlider.value = Float(position)
+            redrawCurentTime()
+        }
+    }
+
+    func redrawCurentTime() {
+        if let duration = trackDuration {
+            let seconds = Int( Float(CMTimeGetSeconds(duration)) * timeSlider.value )
+            let minutes = seconds / 60
+            let hours = minutes / 60
+
+            currentTimeLbl.text = String(format: "%02d:%02d:%02d", hours, minutes%60, seconds%60)
+
+            if currentTimeLbl.hidden {
+                currentTimeLbl.hidden = false
+            }
         }
     }
 }
