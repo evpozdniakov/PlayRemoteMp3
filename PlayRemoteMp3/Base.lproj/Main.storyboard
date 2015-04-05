@@ -49,7 +49,7 @@
                                     <action selector="resumeBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="P24-Rq-pm6"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E1S-Xe-m1n">
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E1S-Xe-m1n">
                                 <rect key="frame" x="86" y="157" width="144" height="31"/>
                                 <connections>
                                     <action selector="remoteMp3VolumeChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Hcs-X3-GHe"/>
@@ -84,11 +84,11 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="aix-vf-xNR" id="0Uz-oU-vie"/>
+                        <outlet property="currentTimeLbl" destination="wMH-Nr-s5H" id="Lhl-Zi-lHL"/>
+                        <outlet property="currentTimeSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
                         <outlet property="pauseBtn" destination="lk0-EQ-Gau" id="hSs-be-FTE"/>
                         <outlet property="playBtn" destination="MwL-Eo-hE2" id="T6U-Dy-EBD"/>
                         <outlet property="resumeBtn" destination="PSH-Vw-8qh" id="ztS-Co-gnZ"/>
-                        <outlet property="currentTimeSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
-                        <outlet property="currentTimeLbl" destination="wMH-Nr-s5H" id="Lhl-Zi-lHL"/>
                         <outlet property="volumeSlider" destination="E1S-Xe-m1n" id="JVT-b8-Flp"/>
                     </connections>
                 </viewController>

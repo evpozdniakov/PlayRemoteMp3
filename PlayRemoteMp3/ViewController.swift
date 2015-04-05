@@ -110,6 +110,8 @@ class ViewController: UIViewController {
         startObservingPlayerKeyPaths()
         player.rate = 1.0;
         player.play()
+        playBtn.enabled = false
+        activityIndicator.startAnimating()
     }
     
     func pausePlayback() {
@@ -163,6 +165,7 @@ class ViewController: UIViewController {
                         println("--- rate > 0")
                         playerStatus = .Playing
                         refreshSliderTimer = NSTimer.scheduledTimerWithTimeInterval(refreshSliderEvery, target: self, selector: Selector("configureRemoteMp3Controls"), userInfo: nil, repeats: true)
+                        activityIndicator.stopAnimating()
                     }
                     else {
                         playerStatus = .Paused
