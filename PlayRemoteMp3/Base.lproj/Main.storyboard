@@ -28,40 +28,34 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="remoteMp3PlayBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="h3J-bF-iJ7"/>
+                                    <action selector="playBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="h3J-bF-iJ7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lk0-EQ-Gau">
-                                <rect key="frame" x="100" y="114" width="43" height="30"/>
+                                <rect key="frame" x="88" y="114" width="43" height="30"/>
                                 <state key="normal" title="Pause">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="remoteMp3PauseBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dsJ-sr-zgO"/>
+                                    <action selector="pauseBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dsJ-sr-zgO"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSH-Vw-8qh">
-                                <rect key="frame" x="200" y="114" width="56" height="30"/>
+                                <rect key="frame" x="177" y="114" width="56" height="30"/>
                                 <state key="normal" title="Resume">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="remoteMp3ResumeBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="P24-Rq-pm6"/>
+                                    <action selector="resumeBtnClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="P24-Rq-pm6"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Volume" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hd-1d-mhX">
-                                <rect key="frame" x="16" y="161" width="57" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E1S-Xe-m1n">
-                                <rect key="frame" x="98" y="157" width="160" height="31"/>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E1S-Xe-m1n">
+                                <rect key="frame" x="86" y="157" width="144" height="31"/>
                                 <connections>
                                     <action selector="remoteMp3VolumeChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Hcs-X3-GHe"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Zvi-oA-bqe">
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Zvi-oA-bqe">
                                 <rect key="frame" x="12" y="205" width="294" height="31"/>
                                 <connections>
                                     <action selector="touchDown:" destination="vXZ-lx-hvc" eventType="touchDown" id="wWK-sg-GcB"/>
@@ -69,9 +63,18 @@
                                     <action selector="touchUpOutside:" destination="vXZ-lx-hvc" eventType="touchUpOutside" id="guR-we-DNJ"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wMH-Nr-s5H">
-                                <rect key="frame" x="126" y="243" width="67" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wMH-Nr-s5H">
+                                <rect key="frame" x="126" y="229" width="67" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="aix-vf-xNR">
+                                <rect key="frame" x="269" y="119" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Volume" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hd-1d-mhX">
+                                <rect key="frame" x="16" y="164" width="41" height="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -80,11 +83,12 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="remoteMp3PauseBtn" destination="lk0-EQ-Gau" id="hSs-be-FTE"/>
-                        <outlet property="remoteMp3PlayBtn" destination="MwL-Eo-hE2" id="T6U-Dy-EBD"/>
-                        <outlet property="remoteMp3ResumeBtn" destination="PSH-Vw-8qh" id="ztS-Co-gnZ"/>
-                        <outlet property="seekSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
-                        <outlet property="trackPlayingTime" destination="wMH-Nr-s5H" id="Lhl-Zi-lHL"/>
+                        <outlet property="activityIndicator" destination="aix-vf-xNR" id="0Uz-oU-vie"/>
+                        <outlet property="pauseBtn" destination="lk0-EQ-Gau" id="hSs-be-FTE"/>
+                        <outlet property="playBtn" destination="MwL-Eo-hE2" id="T6U-Dy-EBD"/>
+                        <outlet property="resumeBtn" destination="PSH-Vw-8qh" id="ztS-Co-gnZ"/>
+                        <outlet property="currentTimeSlider" destination="Zvi-oA-bqe" id="rdN-uF-2CM"/>
+                        <outlet property="currentTimeLbl" destination="wMH-Nr-s5H" id="Lhl-Zi-lHL"/>
                         <outlet property="volumeSlider" destination="E1S-Xe-m1n" id="JVT-b8-Flp"/>
                     </connections>
                 </viewController>
