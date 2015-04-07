@@ -15,19 +15,21 @@ class ViewController: UIViewController {
         case Starting
         case Playing
         case Paused
-        case SeekingWhilePaused
-        case SeekingWhilePlaying
+        case TimeChanging
+        case Seeking
     }
     
     // #MARK: - ivars
 
-    var player = AVPlayer()
-    var pausedAt: CMTime?
-    var trackDuration: CMTime?
     var playerStatus: MyAVPlayerStatus = .Unknown
+    var player = AVPlayer()
+    var playerItem: AVPlayerItem?
+    let playerItemKeysToObserve = ["status"]
+    var trackDuration: CMTime?
+    var pausedAt: CMTime?
     var redrawTimeSliderTimer: NSTimer?
     let refreshSliderEvery = 0.1
-    let playerKeysToObserve = ["rate", "status"]
+    var isTimeSliderMoved = false
 
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var pauseBtn: UIButton!
@@ -44,7 +46,7 @@ class ViewController: UIViewController {
             player.pause()
         }
 
-        stopObservingPlayerKeyPaths()
+        stopKeyPathsObserving()
     }
     
     // #MARK: - events
@@ -77,35 +79,32 @@ class ViewController: UIViewController {
         playbackCompleteSeeking()
     }
 
-    func startObservingPlayerKeyPaths() {
-        for keyPath in playerKeysToObserve {
+    func startKeyPathsObserving() {
+        /* for keyPath in playerKeysToObserve {
             player.addObserver(self, forKeyPath: keyPath, options: .New, context: nil)
+        } */
+        for keyPath in playerItemKeysToObserve {
+            playerItem?.addObserver(self, forKeyPath: keyPath, options: .New, context: nil)
         }
     }
 
-    func stopObservingPlayerKeyPaths() {
-        for keyPath in playerKeysToObserve {
+    func stopKeyPathsObserving() {
+        /* for keyPath in playerKeysToObserve {
             player.removeObserver(self, forKeyPath: keyPath)
+        } */
+        for keyPath in playerItemKeysToObserve {
+            playerItem?.removeObserver(self, forKeyPath: keyPath)
         }
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if let player = object as? AVPlayer {
-            if keyPath == "rate" {
-                if player.status != .ReadyToPlay {
-                    // ignore as player isn't ready to play yet
-                    return;
-                }
-
-                if player.rate > 0 {
-                    playbackDidStart()
-                }
-                else {
-                    playbackDidPause()
-                }
-            }
-            else if keyPath == "status" {
-                // ?
+        if let playerItem = object as? AVPlayerItem {
+            if keyPath == "status" && playerItem.status == .ReadyToPlay {
+                trackDuration = playerItem.duration
+                playerStatus = .Playing
+                println("---- send to reset 0 (stasrt)")
+                configureRedrawTimer()
+                redrawPlaybackControls()
             }
         }
     }
@@ -113,41 +112,43 @@ class ViewController: UIViewController {
     // #MARK: - playback
 
     func startPlayback() {
-        let url = "http://goo.gl/oxlCUq"
-        // let url = "http://mds.kallisto.ru/Kir_Bulychev_-_Zvjozdy_zovut.mp3"
+        // let url = "http://goo.gl/oxlCUq"
+        let url = "http://mds.kallisto.ru/Kir_Bulychev_-_Zvjozdy_zovut.mp3"
         // let url = "http://mds.kallisto.ru/roygbiv/records/mp3/Leonid_Kaganov_-_Choza_griby.mp3"
-        let playerItem = AVPlayerItem( URL:NSURL( string:url ) )
+        // let url = "goo.gl/m8XIZv"
+        playerItem = AVPlayerItem( URL:NSURL( string:url ) )
         player = AVPlayer(playerItem:playerItem)
         player.play()
-        player.rate = 1.0;
-        startObservingPlayerKeyPaths()
+        startKeyPathsObserving()
         playerStatus = .Starting
-        redrawPlaybackControls()
-    }
-
-    func playbackDidStart() {
-        trackDuration = player.currentItem.asset.duration
-        playerStatus = .Playing
-        configureRedrawTimer()
-        activityIndicator.stopAnimating()
         redrawPlaybackControls()
     }
     
     func pausePlayback() {
         pausedAt = player.currentTime()
         player.pause()
-    }
-
-    func playbackDidPause() {
-        playerStatus = .Paused
+        println("---- invalidate 1 -----")
         redrawTimeSliderTimer?.invalidate()
+        playerStatus = .Paused
         redrawPlaybackControls()
     }
     
     func resumePlayback() {
         player.play()
+
         if let pausedAt = pausedAt {
             player.seekToTime(pausedAt)
+
+            if isTimeSliderMoved {
+                isTimeSliderMoved = false
+                playbackCompleteSeeking()
+            }
+            else {
+                println("---- send to reset 1")
+                configureRedrawTimer()
+                playerStatus = .Playing
+                redrawPlaybackControls()
+            }
         }
     }
     
@@ -156,51 +157,32 @@ class ViewController: UIViewController {
     }
 
     func playbackStartSeeking() {
+        println("---- invalidate 2 -----")
         redrawTimeSliderTimer?.invalidate()
-
-        switch playerStatus {
-        case .Playing:
-            playerStatus = .SeekingWhilePlaying
-        case .Paused:
-            playerStatus = .SeekingWhilePaused
-        default:
-            break
-        }
-
-        redrawPlaybackControls()
+        playerStatus = .TimeChanging
     }
 
     func playbackCompleteSeeking() {
         if let duration = trackDuration {
-            let position = Float(timeSlider.value)
-            let value = Float(duration.value) * position
-            let seekTo = CMTimeMake(Int64(value), duration.timescale)
-
-            switch playerStatus {
-            case .SeekingWhilePlaying:
+            if player.rate > 0 {
+                let position = Float(timeSlider.value)
+                let value = Float(duration.value) * position
+                let seekTo = CMTimeMake(Int64(value), duration.timescale)
+    
                 player.seekToTime(seekTo) { success in
                     if success {
+                        println("---- send to reset 2")
                         self.configureRedrawTimer()
                         self.playerStatus = .Playing
                         self.redrawPlaybackControls()
                     }
-                }
-           case .SeekingWhilePaused:
-                player.play()
-                if let pausedAt = pausedAt {
-                    player.seekToTime(seekTo)
-                }
-                player.seekToTime(seekTo) { success in
-                    if success {
-                        self.pausedAt = self.player.currentTime()
-                        self.player.pause()
-                        self.playerStatus = .Paused
-                        self.redrawPlaybackControls()
-                    }
-                }
+                }                
+
+                playerStatus = .Seeking
                 redrawPlaybackControls()
-            default:
-                break
+            }
+            else {
+                isTimeSliderMoved = true
             }
 
         }
@@ -214,13 +196,6 @@ class ViewController: UIViewController {
     
     func redrawPlaybackControls() {
         switch playerStatus {
-        /* case .Unknown:
-            playBtn.enabled = true
-            pauseBtn.enabled = false
-            resumeBtn.enabled = false
-            volumeSlider.enabled = false
-            timeSlider.enabled = false
-            currentTimeLbl.hidden = true */
         case .Starting:
             if playBtn.enabled { playBtn.enabled = false }
             if pauseBtn.enabled { pauseBtn.enabled = false }
@@ -243,7 +218,7 @@ class ViewController: UIViewController {
             if !volumeSlider.enabled { volumeSlider.enabled = true }
             if !timeSlider.enabled { timeSlider.enabled = true }
             if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
-        case .SeekingWhilePlaying, .SeekingWhilePaused:
+        case .Seeking:
             if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
         default:
             break        
@@ -251,6 +226,7 @@ class ViewController: UIViewController {
     }
 
     func redrawTimeSlider() {
+        // println("---- redraw time slider and current time ----")
         if let duration = trackDuration {
             let currentTime = player.currentItem.currentTime()
             let position = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)
