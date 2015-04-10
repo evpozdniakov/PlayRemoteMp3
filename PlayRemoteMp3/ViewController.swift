@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController {
-    enum MyAVPlayerStatus : Int, Printable {
+    enum MyAVPlayerStatus : Int {
         case Unknown
         case Starting
         case Playing
@@ -36,7 +36,6 @@ class ViewController: UIViewController {
     var pausedAt: CMTime?
     var redrawTimeSliderTimer: NSTimer?
     let redrawTimeSliderInterval = 1.0 // seconds
-    var timeSliderMovedWhilePlayerPaused = false
     var lastBtClicked: PlaybackButton = .None
 
     @IBOutlet weak var playBtn: UIButton!
@@ -159,8 +158,7 @@ class ViewController: UIViewController {
     }
     
     func resumePlayback() {
-        assert((playerStatus == .Paused && timeSliderMovedWhilePlayerPaused == false)
-            || (playerStatus == .TimeChanging && timeSliderMovedWhilePlayerPaused == true))
+        assert(playerStatus == .Paused || playerStatus == .TimeChanging)
         assert(player.rate == 0)
         assert(pausedAt != nil)
 
@@ -171,12 +169,6 @@ class ViewController: UIViewController {
             playerStatus = .Seeking
             redrawPlaybackControls()
             player.seekToTime(pausedAt, completionHandler: seekToTimeCallback)
-
-            if timeSliderMovedWhilePlayerPaused {
-                timeSliderMovedWhilePlayerPaused = false
-                playerStatus = .TimeChanging
-                playbackCompleteSeeking()
-            }
         }
     }
     
@@ -201,14 +193,14 @@ class ViewController: UIViewController {
         assert(trackDuration != nil)
 
         if let duration = trackDuration {
+            let position = Float(timeSlider.value)
+            let value = Float(duration.value) * position
+            let seekTo = CMTimeMake(Int64(value), duration.timescale)
+
             if lastBtClicked == .Pause {
-                timeSliderMovedWhilePlayerPaused = true
+                pausedAt = seekTo
             }
-            else {
-                let position = Float(timeSlider.value)
-                let value = Float(duration.value) * position
-                let seekTo = CMTimeMake(Int64(value), duration.timescale)
-    
+            else {    
                 playerStatus = .Seeking
                 redrawPlaybackControls()
                 player.seekToTime(seekTo, completionHandler: seekToTimeCallback)
