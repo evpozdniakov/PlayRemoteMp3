@@ -107,9 +107,6 @@ class ViewController: UIViewController {
     }
 
     func stopKeyPathsObserving() {
-        /* for keyPath in playerKeysToObserve {
-            player.removeObserver(self, forKeyPath: keyPath)
-        } */
         for keyPath in playerItemKeysToObserve {
             playerItem?.removeObserver(self, forKeyPath: keyPath)
         }
