@@ -8,6 +8,27 @@
 
 import UIKit
 
+func throwErrorMessage(message: String, withHandler handler: (Void -> Void)?, inViewController viewCtlr: UIViewController) {
+    let alert = UIAlertController(
+        title: "Ошибка!",
+        message: message,
+        preferredStyle: .Alert
+    )
+
+    let action = UIAlertAction(
+        title: "OK",
+        style: .Default,
+        handler: { (alert: UIAlertAction!) in
+            if let handler = handler {
+                handler()
+            }
+        }
+    )
+
+    alert.addAction(action)
+    viewCtlr.presentViewController(alert, animated: true, completion: nil)
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

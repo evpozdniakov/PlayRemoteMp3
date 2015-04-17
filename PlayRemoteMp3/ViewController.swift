@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         case Pause
         case Resume
     }
-    
+
     // #MARK: - ivars
 
     var playerStatus: MyAVPlayerStatus = .Unknown
@@ -61,7 +61,7 @@ class ViewController: UIViewController {
 
         stopKeyPathsObserving()
     }
-    
+
     // #MARK: - events
 
     @IBAction func playBtnClicked(sender: AnyObject) {
@@ -113,102 +113,128 @@ class ViewController: UIViewController {
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        assert(playerItem != nil)
-
-        if let playerItem = object as? AVPlayerItem {
-            if keyPath == "status" && playerItem.status == .ReadyToPlay {
-                trackDuration = playerItem.duration
-                playerStatus = .Playing
-                configureRedrawTimer()
-                redrawPlaybackControls()
+        if playerItem != nil {
+            if let playerItem = object as? AVPlayerItem {
+                if keyPath == "status" && playerItem.status == .ReadyToPlay {
+                    trackDuration = playerItem.duration
+                    playerStatus = .Playing
+                    configureRedrawTimer()
+                    redrawPlaybackControls()
+                }
             }
+        }
+        else {
+            throwErrorWithCode(1)
         }
     }
 
     // #MARK: - playback
 
     func startPlayback(url: NSURL?) {
-        assert(playerStatus == .Unknown)
-        assert(url != nil)
-
-        if let url = url {
-            playerItem = AVPlayerItem(URL: url)
-            player = AVPlayer(playerItem:playerItem)
-            player.play()
-            startKeyPathsObserving()
-            playerStatus = .Starting
-            redrawPlaybackControls()
+        if playerStatus == .Unknown {
+            if let url = url {
+                playerItem = AVPlayerItem(URL: url)
+                player = AVPlayer(playerItem:playerItem)
+                player.play()
+                startKeyPathsObserving()
+                playerStatus = .Starting
+                redrawPlaybackControls()
+            }
+        }
+        else {
+            throwErrorWithCode(2)
         }
     }
-    
+
     func pausePlayback() {
-        assert(playerStatus != .Paused)
-        // assert(player.rate > 0)
-        // assert(redrawTimeSliderTimer != nil)
-
-        pausedAt = player.currentTime()
-        player.pause()
-        redrawTimeSliderTimer?.invalidate()
-        redrawTimeSliderTimer = nil
-        playerStatus = .Paused
-        redrawPlaybackControls()
-    }
-    
-    func resumePlayback() {
-        assert(playerStatus == .Paused || playerStatus == .TimeChanging)
-        assert(player.rate == 0)
-        assert(pausedAt != nil)
-
-        player.play()
-        if let pausedAt = pausedAt {
-            playerStatus = .Playing
+        if playerStatus != .Paused {
+            pausedAt = player.currentTime()
+            player.pause()
+            redrawTimeSliderTimer?.invalidate()
+            redrawTimeSliderTimer = nil
+            playerStatus = .Paused
             redrawPlaybackControls()
-            playerStatus = .Seeking
-            redrawPlaybackControls()
-            player.seekToTime(pausedAt, completionHandler: seekToTimeCallback)
+        }
+        else {
+            throwErrorWithCode(3)
         }
     }
-    
+
+    func resumePlayback() {
+        if playerStatus == .Paused || playerStatus == .TimeChanging {
+            if player.rate == 0 {
+                if pausedAt != nil {
+                    player.play()
+                    if let pausedAt = pausedAt {
+                        playerStatus = .Playing
+                        redrawPlaybackControls()
+                        playerStatus = .Seeking
+                        redrawPlaybackControls()
+                        player.seekToTime(pausedAt, completionHandler: seekToTimeCallback)
+                    }
+                }
+                else {
+                    throwErrorWithCode(6)
+                }
+            }
+            else {
+                throwErrorWithCode(5)
+            }
+        }
+        else {
+            throwErrorWithCode(4)
+        }
+    }
+
     func playbackSetVolumeTo(value: Float) {
 
         player.volume = value
     }
 
     func playbackStartSeeking() {
-        assert((playerStatus == .Playing && redrawTimeSliderTimer != nil)
+        if ((playerStatus == .Playing && redrawTimeSliderTimer != nil)
             || (playerStatus == .Paused && redrawTimeSliderTimer == nil)
             || (playerStatus == .TimeChanging && redrawTimeSliderTimer == nil)
-            || (playerStatus == .Seeking && redrawTimeSliderTimer == nil))
+            || (playerStatus == .Seeking && redrawTimeSliderTimer == nil)) {
+                redrawTimeSliderTimer?.invalidate()
+                redrawTimeSliderTimer = nil
+                playerStatus = .TimeChanging
+        }
+        else {
+            throwErrorWithCode(7)
+        }
 
-        redrawTimeSliderTimer?.invalidate()
-        redrawTimeSliderTimer = nil
-        playerStatus = .TimeChanging
     }
 
     func playbackCompleteSeeking() {
-        assert(playerStatus == .TimeChanging)
-        assert(trackDuration != nil)
+        if playerStatus == .TimeChanging {
+            if trackDuration != nil {
+                if let duration = trackDuration {
+                    let position = Float(timeSlider.value)
+                    let value = Float(duration.value) * position
+                    let seekTo = CMTimeMake(Int64(value), duration.timescale)
 
-        if let duration = trackDuration {
-            let position = Float(timeSlider.value)
-            let value = Float(duration.value) * position
-            let seekTo = CMTimeMake(Int64(value), duration.timescale)
+                    if lastBtClicked == .Pause {
+                        pausedAt = seekTo
+                    }
+                    else {
+                        playerStatus = .Seeking
+                        redrawPlaybackControls()
+                        player.seekToTime(seekTo, completionHandler: seekToTimeCallback)
+                    }
 
-            if lastBtClicked == .Pause {
-                pausedAt = seekTo
+                }
             }
-            else {    
-                playerStatus = .Seeking
-                redrawPlaybackControls()
-                player.seekToTime(seekTo, completionHandler: seekToTimeCallback)
+            else {
+                throwErrorWithCode(9)
             }
-
+        }
+        else {
+            throwErrorWithCode(8)
         }
     }
 
     func seekToTimeCallback(success: Bool) {
-        assert(playerStatus == .Seeking || playerStatus == .TimeChanging || playerStatus == .Paused)
-
         if success && playerStatus == .Seeking {
             if player.rate == 0 {
                 player.play()
@@ -220,77 +246,81 @@ class ViewController: UIViewController {
     }
 
     func configureRedrawTimer() {
-        assert(redrawTimeSliderTimer == nil)
+        // assert(redrawTimeSliderTimer == nil)
+        if redrawTimeSliderTimer == nil {
+            redrawTimeSliderTimer = NSTimer.scheduledTimerWithTimeInterval(redrawTimeSliderInterval, target: self, selector: Selector("redrawTimeSlider"), userInfo: nil, repeats: true)
+        }
 
-        redrawTimeSliderTimer = NSTimer.scheduledTimerWithTimeInterval(redrawTimeSliderInterval, target: self, selector: Selector("redrawTimeSlider"), userInfo: nil, repeats: true)
     }
 
     // #MARK: - redrawnings
-    
-    func redrawPlaybackControls() {
-        assert(playBtn != nil)
-        assert(pauseBtn != nil)
-        assert(resumeBtn != nil)
-        assert(volumeSlider != nil)
-        assert(timeSlider != nil)
-        assert(activityIndicator != nil)
 
-        switch playerStatus {
-        case .Starting:
-            if playBtn.enabled { playBtn.enabled = false }
-            if pauseBtn.enabled { pauseBtn.enabled = false }
-            if resumeBtn.enabled { resumeBtn.enabled = false }
-            if volumeSlider.enabled { volumeSlider.enabled = false }
-            if timeSlider.enabled { timeSlider.enabled = false }
-            if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
-        case .Playing:
-            if playBtn.enabled { playBtn.enabled = false }
-            if !pauseBtn.enabled { pauseBtn.enabled = true }
-            if resumeBtn.enabled { resumeBtn.enabled = false }
-            if !volumeSlider.enabled { volumeSlider.enabled = true }
-            if !timeSlider.enabled { timeSlider.enabled = true }
-            if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
-        case .Paused:
-            if playBtn.enabled { playBtn.enabled = false }
-            if pauseBtn.enabled { pauseBtn.enabled = false }
-            if !resumeBtn.enabled { resumeBtn.enabled = true }
-            if !volumeSlider.enabled { volumeSlider.enabled = true }
-            if !timeSlider.enabled { timeSlider.enabled = true }
-            if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
-        case .Seeking:
-            if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
-        default:
-            break        
+    func redrawPlaybackControls() {
+        if playBtn != nil && pauseBtn != nil && resumeBtn != nil &&
+            volumeSlider != nil && timeSlider != nil && activityIndicator != nil {
+                switch playerStatus {
+                case .Starting:
+                    if playBtn.enabled { playBtn.enabled = false }
+                    if pauseBtn.enabled { pauseBtn.enabled = false }
+                    if resumeBtn.enabled { resumeBtn.enabled = false }
+                    if volumeSlider.enabled { volumeSlider.enabled = false }
+                    if timeSlider.enabled { timeSlider.enabled = false }
+                    if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
+                case .Playing:
+                    if playBtn.enabled { playBtn.enabled = false }
+                    if !pauseBtn.enabled { pauseBtn.enabled = true }
+                    if resumeBtn.enabled { resumeBtn.enabled = false }
+                    if !volumeSlider.enabled { volumeSlider.enabled = true }
+                    if !timeSlider.enabled { timeSlider.enabled = true }
+                    if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
+                case .Paused:
+                    if playBtn.enabled { playBtn.enabled = false }
+                    if pauseBtn.enabled { pauseBtn.enabled = false }
+                    if !resumeBtn.enabled { resumeBtn.enabled = true }
+                    if !volumeSlider.enabled { volumeSlider.enabled = true }
+                    if !timeSlider.enabled { timeSlider.enabled = true }
+                    if activityIndicator.isAnimating() { activityIndicator.stopAnimating() }
+                case .Seeking:
+                    if !activityIndicator.isAnimating() { activityIndicator.startAnimating() }
+                default:
+                    break
+                }
+        }
+        else {
+            throwErrorWithCode(9)
         }
     }
 
     func redrawTimeSlider() {
-        assert(trackDuration != nil)
-        assert(timeSlider != nil)
-
-        if let duration = trackDuration {
-            let currentTime = player.currentItem.currentTime()
-            let position = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)
-            timeSlider.value = Float(position)
-            redrawCurentTime()
+        if trackDuration != nil && timeSlider != nil {
+            if let duration = trackDuration {
+                let currentTime = player.currentItem.currentTime()
+                let position = CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)
+                timeSlider.value = Float(position)
+                redrawCurentTime()
+            }
+        }
+        else {
+            throwErrorWithCode(10)
         }
     }
 
     func redrawCurentTime() {
-        assert(trackDuration != nil)
-        assert(timeSlider != nil)
-        assert(currentTimeLbl != nil)
+        if trackDuration != nil && timeSlider != nil && currentTimeLbl != nil {
+            if let duration = trackDuration {
+                let seconds = Int( Float(CMTimeGetSeconds(duration)) * timeSlider.value )
+                let minutes = seconds / 60
+                let hours = minutes / 60
 
-        if let duration = trackDuration {
-            let seconds = Int( Float(CMTimeGetSeconds(duration)) * timeSlider.value )
-            let minutes = seconds / 60
-            let hours = minutes / 60
+                currentTimeLbl.text = String(format: "%02d:%02d:%02d", hours, minutes%60, seconds%60)
 
-            currentTimeLbl.text = String(format: "%02d:%02d:%02d", hours, minutes%60, seconds%60)
-
-            if currentTimeLbl.hidden {
-                currentTimeLbl.hidden = false
+                if currentTimeLbl.hidden {
+                    currentTimeLbl.hidden = false
+                }
             }
+        }
+        else {
+            throwErrorWithCode(11)
         }
     }
 
@@ -299,7 +329,7 @@ class ViewController: UIViewController {
     func registerAudioSession() {
         let audioSession = AVAudioSession.sharedInstance()
         var error: NSError?
-        
+
         if audioSession.setCategory(AVAudioSessionCategoryPlayback, error: &error) && audioSession.setActive(true, error: &error) {
             // all fine
         }
@@ -309,6 +339,12 @@ class ViewController: UIViewController {
         else {
             println("registering audio session unknown error")
         }
+    }
+
+    func throwErrorWithCode(code: Int) {
+        let msg = "Error with code \(code)"
+
+        throwErrorMessage(msg, withHandler: nil, inViewController: self)
     }
 }
 
